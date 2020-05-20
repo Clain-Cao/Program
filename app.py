@@ -61,12 +61,12 @@ class LoginWindow(Page):
         self.CalCenter()
         tk.mainloop()
     def Login(self):
-        # if self.User.get() == 'admin' and self.password.get() == 'chm0402':
-        #     self.master.destroy()
-        #     MainPage()
-        # else:
-        #     msg = 'user or password is error , try again please '
-        #     tk.messagebox.showinfo(title='error',message=msg)
+        if self.User.get() == 'admin' and self.password.get() == '123456':
+            self.master.destroy()
+            MainPage()
+        else:
+            msg = 'user or password is error , try again please '
+            tk.messagebox.showinfo(title='error',message=msg)
         # pass
         self.master.destroy()
         MainPage()
