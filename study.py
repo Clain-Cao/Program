@@ -6,6 +6,7 @@ import tkinter.messagebox , threading
 from PIL import ImageTk, Image
 import cvui,time,os,webbrowser,random,datetime
 import win32gui,win32api,win32con
+from datetime import datetime as D
 class Page(object):
     def __init__(self,height = 400 , width = 500 , window = "Page" , background = None):
         self.WindowHeight = height
@@ -62,15 +63,15 @@ class LoginWindow(Page):
         self.CalCenter()
         tk.mainloop()
     def Login(self):
-        # if self.User.get() == 'admin' and self.password.get() == 'chm0402':
-        #     self.master.destroy()
-        #     MainPage()
-        # else:
-        #     msg = 'user or password is error , try again please '
-        #     tk.messagebox.showinfo(title='error',message=msg)
-        # pass
-        self.master.destroy()
-        MainPage()
+        if self.User.get() == 'admin' and self.password.get() == '123456':
+            self.master.destroy()
+            MainPage()
+        else:
+            msg = 'user or  password is error , try again please '
+            tk.messagebox.showinfo(title='error',message=msg)
+        pass
+        # self.master.destroy()
+        # MainPage()
     def Logout(self):
         self.master.destroy()
         pass
@@ -285,7 +286,6 @@ class BasicPage(object):
     def CreateFrame(self):
         date = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
         months = ['','January','February','March','April','May','June','July','Aguest','September','October','November','December']
-        RepStatus = False
         cvui.init(self.WindowName)
         wallpaper = cv.imread('xuejing.jpg')
         cup = cv.imread('cup.jpg')
@@ -293,7 +293,7 @@ class BasicPage(object):
         cv.moveWindow(winname=self.WindowName,x=250,y=0)
         catcher = int(time.time()) + random.randint(2700,5000)
         # catcher = int(time.time()) + random.randint(3,10)
-        WARN = '2020-05-29 16:25:00'
+        WARN = '2020-06-12 14:25:00'
         while True:
             Basis = Frame('Basis',background=self.background,pagewidth=self.width, pagelength=self.length)
             Capframe = Frame('Capture',coordx=500,coordy=200,father=Basis,pagewidth=600,pagelength=899)
@@ -331,6 +331,8 @@ class BasicPage(object):
             # cv.putText(Basis.background , " Now Time : %s" % cur_time , (500,30) , cv.FONT_HERSHEY_COMPLEX, 1.0, (255,255,255), 2)
             Capframe.UpdateBackground(frame)
             c = cv.waitKey(10)
+            if cur_time.tm_hour % 24 == 0 and cur_time.tm_min % 60 == 0:
+                self.Executer.UpdateDays()
             if catcher <= int(time.time()):
 
                 if not os.path.exists('Status'):
@@ -367,7 +369,7 @@ class ExecuteStudy(object):
         self.ImagesLogs = images_logs
         self.StudyTime = 0
         self.LastExitTime = 0
-        self.DaysRemaining = 201
+        self.DaysRemaining = 200
         self.listener = Listener()
         self.Init()
     def Init(self):
@@ -392,8 +394,18 @@ class ExecuteStudy(object):
         except :
             with open(self.Logs,'w',encoding='utf-8') as f:
                 pass
+        self.UpdateDays()
         tk.messagebox.showinfo(title='tips',message='initialize successfully')
         self.listener.RecordLogs(content='%s : You have successfully logged into the interface' % ( time.strftime("%Y-%m-%d %H:%M:%S", self.listener.CurTime)))
+    # def DataSaver():
+    #     with open(self.Logs,'w',encoding='utf-8') as f:
+    #         f.write(self.)
+    #     pass
+    def UpdateDays(self):
+        future = D.strptime('2020-12-21 00:00:00','%Y-%m-%d %H:%M:%S')
+        now = D.now()
+        delta = future - now
+        self.DaysRemaining = delta.days + 1
 def ReportOnTime(Time):
     msg = 'currnet time is '
     winname = 'Tips'
